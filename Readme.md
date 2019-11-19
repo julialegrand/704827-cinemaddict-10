@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Юлия Сартбаева](https://up.htmlacademy.ru/ecmascript/10/user/704827).
-* Наставник: `Евгений Воронин`.
+* Наставник: [Евгений Воронин](https://htmlacademy.ru/profile/id245996).
 
 ---
 
