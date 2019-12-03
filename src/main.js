@@ -6,10 +6,13 @@ import {createContentTemplate} from './components/content.js';
 import {createSortTemplate} from './components/sort.js';
 // import {createFilmDetailtemplate} from './components/popap.js';
 import {generateMovies} from './mock/movie.js';
+import {generateFilters} from './mock/filter.js';
 const SHOWING_MOVIE_COUNT = 5;
 const SHOWING_MOVIES_COUNT_BY_BUTTON = 5;
 const COUNT_FILMS = 15;
 const COUNT_EXTRA_FILMS = 2;
+
+const filters = generateFilters();
 
 const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
@@ -21,7 +24,7 @@ const mainElement = document.querySelector(`.main`);
 
 
 render(headerElement, createProfileTemplate());
-render(mainElement, createMenuTemplate());
+render(mainElement, createMenuTemplate(filters));
 render(mainElement, createSortTemplate());
 render(mainElement, createContentTemplate());
 
