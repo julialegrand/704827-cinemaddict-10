@@ -74,6 +74,14 @@ const createRandomItems = (items, min, max) => {
 
 const generateMovie = () => {
 
+  const isInWatchlist = getRandomBoolean();
+  const isFavorite = getRandomBoolean();
+  let isWatched = getRandomBoolean();
+
+  if (isInWatchlist) {
+    isWatched = false;
+  }
+
   return {
     title: getRandomItem(movieNames),
     rating: getRandomDecimal(MIN_RATING_COUNT, MAX_RATING_COUNT),
@@ -83,8 +91,9 @@ const generateMovie = () => {
     poster: getRandomItem(Posters),
     description: createRandomItems(DESCRIPTION.split(`.`), DESCRIPTION_MIN, DESCRIPTION_MAX).join(` `),
     comments: getRandomNumber(MIN_COMMENTS_COUNT, MAX_COMMENTS_COUNT),
-    isFavorite: getRandomBoolean(),
-    IsWatched: getRandomBoolean()
+    isFavorite,
+    isWatched,
+    isInWatchlist
   };
 };
 

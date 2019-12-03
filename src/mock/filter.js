@@ -1,18 +1,16 @@
 const filters = [
-  {title: `All movies`, href: `all`},
-  {title: `Watchlist`, href: `watchlist`},
-  {title: `History`, href: `history`},
-  {title: `Favorites`, href: `favorites`}
+  {title: `All movies`, href: `all`, key: null},
+  {title: `Watchlist`, href: `watchlist`, key: `isInWatchlist`},
+  {title: `History`, href: `history`, key: `isWatched`},
+  {title: `Favorites`, href: `favorites`, key: `isFavorite`}
 ];
 
-const COUNT_FILTER = 20;
-
-const generateFilters = () => {
+const generateFilters = (movies) => {
   return filters.map((filter, index) => {
     return {
       title: filter.title,
       href: filter.href,
-      count: index !== 0 ? Math.round(Math.random() * COUNT_FILTER) : null,
+      count: filter.key ? movies.filter((movie) => movie[filter.key]).length : null,
       isActive: index === 0,
     };
   });
