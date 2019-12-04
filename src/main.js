@@ -5,9 +5,10 @@ import {createFimlsCardsTemplates} from './components/card.js';
 import {createContentTemplate} from './components/content.js';
 import {createSortTemplate} from './components/sort.js';
 import {createStatsTemplate} from './components/footer.js';
-// import {createFilmDetailtemplate} from './components/popap.js';
+import {createFilmDetailtemplate, removeFilmDetailTemplate} from './components/popup.js';
 import {generateMovies} from './mock/movie.js';
 import {generateFilters} from './mock/filter.js';
+import {sortMovies} from './util.js';
 const SHOWING_MOVIE_COUNT = 5;
 const SHOWING_MOVIES_COUNT_BY_BUTTON = 5;
 const COUNT_FILMS = 15;
@@ -43,8 +44,15 @@ const filmListExtra = document.querySelectorAll(`.films-list--extra .films-list_
 const filmsTopRatedContainer = filmListExtra[0];
 const filmsMostCommentedContainer = filmListExtra[1];
 
-render(filmsTopRatedContainer, createFimlsCardsTemplates(generateMovies(COUNT_EXTRA_FILMS)));
-render(filmsMostCommentedContainer, createFimlsCardsTemplates(generateMovies(COUNT_EXTRA_FILMS)));
+const topRatedFilms = movies.filter((movie) => movie.rating > 0);
+const sortedTopRatedFilms = sortMovies(topRatedFilms, `rating`).slice(0, 2);
+
+
+const topCommentedFilms = movies.filter((movie) => movie.comments.length > 0);
+const sortedTopCommentedFilms = sortMovies(topCommentedFilms, `comments`).slice(0, 2);
+
+render(filmsTopRatedContainer, createFimlsCardsTemplates(sortedTopRatedFilms));
+render(filmsMostCommentedContainer, createFimlsCardsTemplates(sortedTopCommentedFilms));
 
 const loadMoreButton = mainElement.querySelector(`.films-list__show-more`);
 loadMoreButton.addEventListener(`click`, () => {
@@ -58,4 +66,10 @@ loadMoreButton.addEventListener(`click`, () => {
   }
 });
 
-// render(footerElement, createFilmDetailtemplate, `afterend`);
+render(footerElement, createFilmDetailtemplate(movies[0]), `afterend`);
+
+const closeButton = document.querySelector(`.film-details__close-btn`);
+closeButton.addEventListener(`click`, () => {
+  removeFilmDetailTemplate();
+  closeButton.removeEventListener();
+});

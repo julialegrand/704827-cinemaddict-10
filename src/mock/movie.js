@@ -12,9 +12,11 @@ const MAX_YEAR_MOVIE = 2020;
 const MIN_DURATION_COUNT = 40;
 const MAX_DURATION_COUNT = 180;
 const MIN_COMMENTS_COUNT = 0;
-const MAX_COMMENTS_COUNT = 20;
+const MAX_COMMENTS_COUNT = 5;
+const MIN_MOCK_COUNT = 0;
+const MAX_MOCK_COUNT = 3;
 
-const movieNames = [
+const MOVIE_NAMES = [
   `Полярный экспресс`,
   `Джанго освобожденный`,
   `Судная ночь`,
@@ -31,7 +33,7 @@ const movieNames = [
   `Тpеугольник`,
   `Не отпускай меня`];
 
-const Posters = [
+const POSTERS = [
   `the-great-flamarion.jpg`,
   `made-for-each-other.png`,
   `popeye-meets-sinbad.png`,
@@ -40,12 +42,44 @@ const Posters = [
   `the-dance-of-life.jpg`
 ];
 
-const Genres = [
+const GENRES = [
   `Thriller`,
   `Action`,
   `Comedy`,
   `Horror`,
   `Fantasy`
+];
+
+const ACTORS = [
+  `Matt Damon`,
+  `Brad Pitt`,
+  `Angeline Jolie`,
+  `Sharon Stone`,
+  `Bradley Cooper`
+];
+
+const PEOPLE = [
+  `John Doe`,
+  `Anna Smith`,
+  `Jessica Paul`,
+  `Erich Von Stroheim`,
+  `Mary Beth Hughes`,
+  `Richard Weil`
+];
+
+const COUNTRIES = [
+  `Russia`,
+  `USA`,
+  `Turkey`,
+  `Italy`,
+  `Germany`
+];
+
+const EMOTIONS = [
+  `smile`,
+  `sleeping`,
+  `puke`,
+  `angry`
 ];
 
 
@@ -61,15 +95,38 @@ const getRandomBoolean = () => {
   return Math.random() > RANDOM_LIMIT;
 };
 
+const getRandomDate = () => {
+  const currentDate = new Date();
+  const year = getRandomNumber(MIN_YEAR_MOVIE, MAX_YEAR_MOVIE);
+  currentDate.setFullYear(year);
+
+  return currentDate;
+};
+
 const getRandomItem = (items) => {
   const index = getRandomNumber(MIN_NUMBER, items.length);
   return items[index];
 };
 
-const createRandomItems = (items, min, max) => {
+const getRandomItems = (items, min, max) => {
   return items
     .filter(() => getRandomBoolean())
     .slice(min, max);
+};
+
+const createComment = () => {
+  return {
+    text: getRandomItems(DESCRIPTION.split(`.`), MIN_COMMENTS_COUNT, MAX_COMMENTS_COUNT).join(` `),
+    emotion: getRandomItem(EMOTIONS),
+    author: getRandomItem(PEOPLE),
+    commentDate: getRandomDate(),
+  };
+};
+
+const createComments = (count) => {
+  return new Array(count)
+    .fill(``)
+    .map(createComment);
 };
 
 const generateMovie = () => {
@@ -82,15 +139,22 @@ const generateMovie = () => {
     isWatched = false;
   }
 
+  const title = getRandomItem(MOVIE_NAMES);
+
   return {
-    title: getRandomItem(movieNames),
-    rating: getRandomDecimal(MIN_RATING_COUNT, MAX_RATING_COUNT),
+    title,
+    originalTitle: title,
+    rating: parseFloat(getRandomDecimal(MIN_RATING_COUNT, MAX_RATING_COUNT)),
+    director: getRandomItem(PEOPLE),
+    writers: getRandomItems(PEOPLE, MIN_MOCK_COUNT, MAX_MOCK_COUNT),
+    actors: getRandomItems(ACTORS, MIN_MOCK_COUNT, MAX_MOCK_COUNT),
     year: MIN_YEAR_MOVIE + getRandomNumber(MIN_YEAR_MOVIE, MAX_YEAR_MOVIE),
     duration: getRandomNumber(MIN_DURATION_COUNT, MAX_DURATION_COUNT),
-    genre: getRandomItem(Genres),
-    poster: getRandomItem(Posters),
-    description: createRandomItems(DESCRIPTION.split(`.`), DESCRIPTION_MIN, DESCRIPTION_MAX).join(` `),
-    comments: getRandomNumber(MIN_COMMENTS_COUNT, MAX_COMMENTS_COUNT),
+    country: getRandomItem(COUNTRIES),
+    genre: getRandomItems(GENRES, MIN_MOCK_COUNT, MAX_MOCK_COUNT),
+    poster: getRandomItem(POSTERS),
+    description: getRandomItems(DESCRIPTION.split(`.`), DESCRIPTION_MIN, DESCRIPTION_MAX).join(` `),
+    comments: createComments(getRandomNumber(MIN_COMMENTS_COUNT, MAX_COMMENTS_COUNT)),
     isFavorite,
     isWatched,
     isInWatchlist
