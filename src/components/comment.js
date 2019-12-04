@@ -3,6 +3,7 @@ import {getFormatedDiffrenceDate} from '../util';
 const createCommentTemplate = (comment) => {
   const {text, author, emotion, commentDate} = comment;
   const formattedDate = getFormatedDiffrenceDate(commentDate, new Date());
+
   return `
     <li class="film-details__comment">
       <span class="film-details__comment-emoji">
@@ -21,7 +22,8 @@ const createCommentTemplate = (comment) => {
 };
 
 export const createCommentsTemplate = (comments) => {
-  const commentsTemplate = comments.map((comment) => createCommentTemplate(comment)).join(`\n`);
+  const commentsTemplate = comments.map(createCommentTemplate).join(`\n`);
+
   return `<ul class="film-details__comments-list">
           ${commentsTemplate}
           </ul>`;

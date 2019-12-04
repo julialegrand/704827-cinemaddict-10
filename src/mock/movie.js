@@ -110,7 +110,7 @@ const getRandomItem = (items) => {
 
 const getRandomItems = (items, min, max) => {
   return items
-    .filter(() => getRandomBoolean())
+    .filter(getRandomBoolean)
     .slice(min, max);
 };
 

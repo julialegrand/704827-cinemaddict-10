@@ -8,7 +8,7 @@ const createFiltersTemplate = (filters) => {
   .join(`\n`);
 };
 
-const createMenuTemplate = (filters) =>{
+const createMenuTemplate = (filters) => {
   const filtersTemplate = createFiltersTemplate(filters);
 
   return `<nav class="main-navigation">

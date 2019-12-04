@@ -12,7 +12,6 @@ import {sortMovies} from './util.js';
 const SHOWING_MOVIE_COUNT = 5;
 const SHOWING_MOVIES_COUNT_BY_BUTTON = 5;
 const COUNT_FILMS = 15;
-const COUNT_EXTRA_FILMS = 2;
 
 const movies = generateMovies(COUNT_FILMS);
 const filters = generateFilters(movies);
@@ -46,7 +45,6 @@ const filmsMostCommentedContainer = filmListExtra[1];
 
 const topRatedFilms = movies.filter((movie) => movie.rating > 0);
 const sortedTopRatedFilms = sortMovies(topRatedFilms, `rating`).slice(0, 2);
-
 
 const topCommentedFilms = movies.filter((movie) => movie.comments.length > 0);
 const sortedTopCommentedFilms = sortMovies(topCommentedFilms, `comments`).slice(0, 2);

@@ -24,12 +24,17 @@ const getDuration = (duration) => {
   return formatedDuration;
 };
 
-const getDescription = (description) =>{
-  return (description.length > MAX_DESCRIPTION_LENGTH) ? `${description.substring(MIN_DESCRIPTION_LENGTH, (MAX_DESCRIPTION_LENGTH - DESCRIPTION_SPACE))}...` : description;
+const getDescription = (description) => {
+  if (description.length > MAX_DESCRIPTION_LENGTH) {
+    return `${description.substring(MIN_DESCRIPTION_LENGTH, (MAX_DESCRIPTION_LENGTH - DESCRIPTION_SPACE))}...`;
+  }
+
+  return description;
 };
 
 const getComments = (comments) => {
   const commentsCount = comments.length;
+
   return commentsCount > MANY_COMMENTS_COUNT ? `${commentsCount} comments` : `${commentsCount} comment`;
 };
 

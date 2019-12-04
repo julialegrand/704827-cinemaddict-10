@@ -3,13 +3,13 @@ import {getDuration, getDescription, getComments} from '../util.js';
 
 const createFimlCardTemplate = (filmCard) => {
 
-  const {title, rating, year, duration, genre, poster, description, comments, isFavorite, IsWatched} = filmCard;
+  const {title, rating, year, duration, genre, poster, description, comments, isFavorite, isWatched} = filmCard;
 
   const formatedDuration = getDuration(duration);
   const formatedDescription = getDescription(description);
   const formatedComments = getComments(comments);
 
-  const activeClass = isFavorite || IsWatched ? `film-card__controls-item--active` : ``;
+  const activeClass = isFavorite || isWatched ? `film-card__controls-item--active` : ``;
 
   return `<article class="film-card">
     <h3 class="film-card__title">${title}</h3>
@@ -31,13 +31,10 @@ const createFimlCardTemplate = (filmCard) => {
 };
 
 
-const createFimlsCardsTemplates = (filmsCards) =>{
-  let fimlCardsTemplates = ``;
-
-  filmsCards.forEach((filmsCard) => {
-    fimlCardsTemplates += createFimlCardTemplate(filmsCard);
-  });
+const createFimlsCardsTemplates = (filmsCards) => {
+  const fimlCardsTemplates = filmsCards.map(createFimlCardTemplate).join(`\n`);
 
   return fimlCardsTemplates;
 };
+
 export {createFimlsCardsTemplates};

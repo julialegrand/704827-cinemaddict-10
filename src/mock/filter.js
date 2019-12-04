@@ -1,4 +1,4 @@
-const filters = [
+const FILTERS = [
   {title: `All movies`, href: `all`, key: null},
   {title: `Watchlist`, href: `watchlist`, key: `isInWatchlist`},
   {title: `History`, href: `history`, key: `isWatched`},
@@ -6,7 +6,7 @@ const filters = [
 ];
 
 const generateFilters = (movies) => {
-  return filters.map((filter, index) => {
+  return FILTERS.map((filter, index) => {
     return {
       title: filter.title,
       href: filter.href,
