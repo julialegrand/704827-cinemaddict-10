@@ -1,11 +1,8 @@
 const MINUTE_IN_HOUR = 60;
-
 const MIN_DESCRIPTION_LENGTH = 0;
 const MAX_DESCRIPTION_LENGTH = 140;
 const DESCRIPTION_SPACE = 1;
-
 const MANY_COMMENTS_COUNT = 1;
-
 const ONE_DAY = 86400000;
 
 const getDuration = (duration) => {
@@ -85,4 +82,27 @@ const sortMovies = (movies, key) => {
   return sorted;
 };
 
-export {getDuration, getDescription, getComments, getFormatedDiffrenceDate, sortMovies};
+const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`
+};
+
+
+const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
+};
+
+const render = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+  }
+};
+export {RenderPosition, createElement, render, getDuration, getDescription, getComments, getFormatedDiffrenceDate, sortMovies};
