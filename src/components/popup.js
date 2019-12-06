@@ -1,10 +1,12 @@
 import {createCommentsTemplate} from './comment';
+import {createElement} from '../util.js';
+
 
 const createGenreTemplate = (genres) => {
   return genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(`\n`);
 };
 
-export const createFilmDetailtemplate = (movie) => {
+const createFilmDetailtemplate = (movie) => {
   const {title, originalTitle, rating, director, writers, actors, year, duration, country, genre,
     poster, description, comments} = movie;
   const genresTemplate = createGenreTemplate(genre);
@@ -130,11 +132,25 @@ export const createFilmDetailtemplate = (movie) => {
   );
 };
 
-export const removeFilmDetailTemplate = () => {
-  const filmDetails = document.querySelector(`.film-details`);
-  if (filmDetails !== null) {
-    filmDetails.remove();
+export default class Popup {
+  constructor(movie) {
+    this._movie = movie;
+    this._element = null;
   }
-};
 
+  getTemplate() {
+    return createFilmDetailtemplate(this._movie);
+  }
 
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

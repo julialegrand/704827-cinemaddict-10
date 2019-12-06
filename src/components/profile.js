@@ -1,3 +1,5 @@
+import {createElement} from '../util.js';
+
 const ProfileRatings = {
   NOVICE: `Novice`,
   FAN: `Fan`,
@@ -7,7 +9,7 @@ const NOVICE_MIN = 1;
 const FAN_MIN = 11;
 const MOVIE_BUFF_MIN = 21;
 
-export const createProfileTemplate = (watchedMovies) => {
+const createProfileTemplate = (watchedMovies) => {
   let profileRating = ``;
   if (watchedMovies >= NOVICE_MIN) {
     profileRating = ProfileRatings.NOVICE;
@@ -18,8 +20,32 @@ export const createProfileTemplate = (watchedMovies) => {
   if (watchedMovies >= MOVIE_BUFF_MIN) {
     profileRating = ProfileRatings.MOVIE_BUFF;
   }
+
   return `<section class="header__profile profile">
     <p class="profile__rating">${profileRating}</p>
     <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
   </section>`;
 };
+
+export default class Profile {
+  constructor(watchedMovies) {
+    this._watchedMovies = watchedMovies;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createProfileTemplate(this._watchedMovies);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

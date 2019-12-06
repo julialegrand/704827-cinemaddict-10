@@ -1,5 +1,5 @@
 
-import {getDuration, getDescription, getComments} from '../util.js';
+import {getDuration, getDescription, getComments, createElement} from '../util.js';
 
 const createFimlCardTemplate = (filmCard) => {
 
@@ -31,10 +31,25 @@ const createFimlCardTemplate = (filmCard) => {
 };
 
 
-const createFimlsCardsTemplates = (filmsCards) => {
-  const fimlCardsTemplates = filmsCards.map(createFimlCardTemplate).join(`\n`);
+export default class Card {
+  constructor(filmCard) {
+    this._filmCard = filmCard;
+    this._element = null;
+  }
 
-  return fimlCardsTemplates;
-};
+  getTemplate() {
+    return createFimlCardTemplate(this._filmCard);
+  }
 
-export {createFimlsCardsTemplates};
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
