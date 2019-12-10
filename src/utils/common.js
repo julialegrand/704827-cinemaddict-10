@@ -1,3 +1,4 @@
+/* eslint-disable no-multi-spaces */
 const MINUTE_IN_HOUR = 60;
 const MIN_DESCRIPTION_LENGTH = 0;
 const MAX_DESCRIPTION_LENGTH = 140;
@@ -82,27 +83,4 @@ const sortMovies = (movies, key) => {
   return sorted;
 };
 
-const RenderPosition = {
-  AFTERBEGIN: `afterbegin`,
-  BEFOREEND: `beforeend`
-};
-
-
-const createElement = (template) => {
-  const newElement = document.createElement(`div`);
-  newElement.innerHTML = template;
-
-  return newElement.firstChild;
-};
-
-const render = (container, element, place) => {
-  switch (place) {
-    case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
-      break;
-    case RenderPosition.BEFOREEND:
-      container.append(element);
-      break;
-  }
-};
-export {RenderPosition, createElement, render, getDuration, getDescription, getComments, getFormatedDiffrenceDate, sortMovies};
+export  {getDuration, getDescription, getComments, getFormatedDiffrenceDate, sortMovies};

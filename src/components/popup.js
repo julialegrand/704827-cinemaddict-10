@@ -1,5 +1,5 @@
 import {createCommentsTemplate} from './comment';
-import {createElement} from '../util.js';
+import AbstractComponent from './abstract-component.js';
 
 
 const createGenreTemplate = (genres) => {
@@ -132,25 +132,18 @@ const createFilmDetailtemplate = (movie) => {
   );
 };
 
-export default class Popup {
+export default class Popup extends AbstractComponent {
   constructor(movie) {
+    super();
     this._movie = movie;
-    this._element = null;
   }
 
   getTemplate() {
     return createFilmDetailtemplate(this._movie);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setEditPopupClickHandler(handler) {
+    this.getElement().querySelector(`.film-details .film-details__close-btn`)
+      .addEventListener(`click`, handler);
   }
 }
