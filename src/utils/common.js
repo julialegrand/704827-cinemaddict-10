@@ -1,4 +1,3 @@
-/* eslint-disable no-multi-spaces */
 const MINUTE_IN_HOUR = 60;
 const MIN_DESCRIPTION_LENGTH = 0;
 const MAX_DESCRIPTION_LENGTH = 140;
@@ -6,7 +5,7 @@ const DESCRIPTION_SPACE = 1;
 const MANY_COMMENTS_COUNT = 1;
 const ONE_DAY = 86400000;
 
-const getDuration = (duration) => {
+export const getDuration = (duration) => {
   let formatedDuration = ``;
 
   if (duration < MINUTE_IN_HOUR) {
@@ -22,7 +21,7 @@ const getDuration = (duration) => {
   return formatedDuration;
 };
 
-const getDescription = (description) => {
+export const getDescription = (description) => {
   if (description.length > MAX_DESCRIPTION_LENGTH) {
     return `${description.substring(MIN_DESCRIPTION_LENGTH, (MAX_DESCRIPTION_LENGTH - DESCRIPTION_SPACE))}...`;
   }
@@ -30,17 +29,17 @@ const getDescription = (description) => {
   return description;
 };
 
-const getComments = (comments) => {
+export const getComments = (comments) => {
   const commentsCount = comments.length;
 
   return commentsCount > MANY_COMMENTS_COUNT ? `${commentsCount} comments` : `${commentsCount} comment`;
 };
 
-const getFormatedValue = (value) => {
+export const getFormatedValue = (value) => {
   return value < 10 ? `0${value}` : value.toString();
 };
 
-const getDateValues = (date) => {
+export const getDateValues = (date) => {
   const year = date.getFullYear();
   const month = date.getMonth();
   const day = date.getDate();
@@ -56,7 +55,7 @@ export const getFormatedCommentDate = (date) => {
   return `${year}/${month}/${day} ${hours}:${minutes}`;
 };
 
-const getFormatedDiffrenceDate = (date, currentDate) => {
+export const getFormatedDiffrenceDate = (date, currentDate) => {
   const differenceTimestamp = currentDate.valueOf() - date.valueOf();
   if (differenceTimestamp < ONE_DAY) {
     return `Today`;
@@ -70,7 +69,7 @@ const getFormatedDiffrenceDate = (date, currentDate) => {
 
 };
 
-const sortMovies = (movies, key) => {
+export const sortMovies = (movies, key) => {
   const sorted = movies.slice().sort((prevMovie, nextMovie) => {
     if (prevMovie[key] > nextMovie[key]) {
       return -1;
@@ -83,4 +82,4 @@ const sortMovies = (movies, key) => {
   return sorted;
 };
 
-export  {getDuration, getDescription, getComments, getFormatedDiffrenceDate, sortMovies};
+

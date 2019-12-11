@@ -16,7 +16,7 @@ const COUNT_FILMS = 15;
 
 const renderMovie = (movie, container, footerElement) => {
   const cardElement = new CardComponent(movie);
-  const cardPopapComponent = new PopupComponent(movie);
+  const cardPopupComponent = new PopupComponent(movie);
 
   const onEscKeyDown = (evt) => {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
@@ -26,11 +26,11 @@ const renderMovie = (movie, container, footerElement) => {
     }
   };
   const closePopup = () => {
-    remove(cardPopapComponent);
+    remove(cardPopupComponent);
   };
   const showPopup = () => {
-    render(footerElement, cardPopapComponent, RenderPosition.AFTERBEGIN);
-    cardPopapComponent.setEditPopupClickHandler(() => {
+    render(footerElement, cardPopupComponent, RenderPosition.AFTERBEGIN);
+    cardPopupComponent.setEditPopupClickHandler(() => {
       closePopup();
     });
     document.addEventListener(`keydown`, onEscKeyDown);
@@ -47,7 +47,6 @@ const renderMovie = (movie, container, footerElement) => {
 
   render(container, cardElement, RenderPosition.BEFOREEND);
 };
-
 
 export default class PageController {
   constructor(container) {
@@ -74,49 +73,51 @@ export default class PageController {
     const content = new ContentComponent();
     if (movies.length === 0) {
       render(mainElement, new NoDataComponent(), RenderPosition.BEFOREEND);
-    } else {
-      render(mainElement, content, RenderPosition.BEFOREEND);
-      render(footerElement, new FooterComponent(COUNT_FILMS), RenderPosition.BEFOREEND);
+      return;
+    }
+    render(mainElement, content, RenderPosition.BEFOREEND);
+    render(footerElement, new FooterComponent(COUNT_FILMS), RenderPosition.BEFOREEND);
 
-      const filmsList = content.getElement().querySelector(`.films-list .films-list__container`);
-      let showingMoviesCount = SHOWING_MOVIE_COUNT;
+    const filmsList = content.getElement().querySelector(`.films-list .films-list__container`);
+    let showingMoviesCount = SHOWING_MOVIE_COUNT;
 
-      movies.slice(0, showingMoviesCount)
+    movies
+      .slice(0, showingMoviesCount)
       .forEach((movie) => renderMovie(movie, filmsList, footerElement));
 
-      const filmListExtra = content.getElement().querySelectorAll(`.films-list--extra .films-list__container`);
+    const filmListExtra = content.getElement().querySelectorAll(`.films-list--extra .films-list__container`);
 
-      const button = content.getElement().querySelector(`.films-list`);
+    const button = content.getElement().querySelector(`.films-list`);
 
-      const filmsTopRatedContainer = filmListExtra[0];
-      const filmsMostCommentedContainer = filmListExtra[1];
+    const filmsTopRatedContainer = filmListExtra[0];
+    const filmsMostCommentedContainer = filmListExtra[1];
 
-      const topRatedFilms = movies.filter((movie) => movie.rating > 0);
-      const sortedTopRatedFilms = sortMovies(topRatedFilms, `rating`).slice(0, 2);
+    const topRatedFilms = movies.filter((movie) => movie.rating > 0);
+    const sortedTopRatedFilms = sortMovies(topRatedFilms, `rating`).slice(0, 2);
 
-      const topCommentedFilms = movies.filter((movie) => movie.comments.length > 0);
-      const sortedTopCommentedFilms = sortMovies(topCommentedFilms, `comments`).slice(0, 2);
+    const topCommentedFilms = movies.filter((movie) => movie.comments.length > 0);
+    const sortedTopCommentedFilms = sortMovies(topCommentedFilms, `comments`).slice(0, 2);
 
-      sortedTopRatedFilms.forEach((movie) => {
-        renderMovie(movie, filmsTopRatedContainer, footerElement);
-      });
-      sortedTopCommentedFilms.forEach((movie) => {
-        renderMovie(movie, filmsMostCommentedContainer, footerElement);
-      });
+    sortedTopRatedFilms.forEach((movie) => {
+      renderMovie(movie, filmsTopRatedContainer, footerElement);
+    });
+    sortedTopCommentedFilms.forEach((movie) => {
+      renderMovie(movie, filmsMostCommentedContainer, footerElement);
+    });
 
-      const buttonElement = new ButtonComponent();
-      render(button, buttonElement, RenderPosition.BEFOREEND);
-      buttonElement.setClickHandler(() => {
-        const prevMoviesCount = showingMoviesCount;
-        showingMoviesCount = showingMoviesCount + SHOWING_MOVIES_COUNT_BY_BUTTON;
-        movies.slice(prevMoviesCount, showingMoviesCount)
+    const buttonElement = new ButtonComponent();
+    render(button, buttonElement, RenderPosition.BEFOREEND);
+    buttonElement.setClickHandler(() => {
+      const prevMoviesCount = showingMoviesCount;
+      showingMoviesCount = showingMoviesCount + SHOWING_MOVIES_COUNT_BY_BUTTON;
+      movies
+        .slice(prevMoviesCount, showingMoviesCount)
         .forEach((movie) => renderMovie(movie, filmsList, footerElement));
 
-        if (showingMoviesCount >= movies.length) {
-          remove(buttonElement);
-        }
-      });
-    }
+      if (showingMoviesCount >= movies.length) {
+        remove(buttonElement);
+      }
+    });
   }
 }
 

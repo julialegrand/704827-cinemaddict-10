@@ -1,4 +1,4 @@
-import PageController from './controllers/main.js';
+import PageController from './controllers/page.js';
 import {generateMovies} from './mock/movie.js';
 import {generateFilters} from './mock/filter.js';
 
