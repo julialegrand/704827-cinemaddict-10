@@ -1,5 +1,6 @@
 
-import {getDuration, getDescription, getComments, createElement} from '../util.js';
+import {getDuration, getDescription, getComments} from '../utils/common.js';
+import AbstractComponent from './abstract-component.js';
 
 const createFimlCardTemplate = (filmCard) => {
 
@@ -31,25 +32,28 @@ const createFimlCardTemplate = (filmCard) => {
 };
 
 
-export default class Card {
+export default class Card extends AbstractComponent {
   constructor(filmCard) {
+    super();
     this._filmCard = filmCard;
-    this._element = null;
   }
 
   getTemplate() {
     return createFimlCardTemplate(this._filmCard);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  setEditPosterClickHandler(handler) {
+    this.getElement().querySelector(`.film-card .film-card__poster`)
+      .addEventListener(`click`, handler);
   }
 
-  removeElement() {
-    this._element = null;
+  setEditTitleClickHandler(handler) {
+    this.getElement().querySelector(`.film-card .film-card__title`)
+      .addEventListener(`click`, handler);
+  }
+
+  setEditCommentClickHandler(handler) {
+    this.getElement().querySelector(`.film-card .film-card__comments`)
+      .addEventListener(`click`, handler);
   }
 }

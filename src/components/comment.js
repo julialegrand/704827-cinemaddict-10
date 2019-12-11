@@ -1,4 +1,4 @@
-import {getFormatedDiffrenceDate} from '../util';
+import {getFormatedDiffrenceDate} from '../utils/common.js';
 
 const createCommentTemplate = (comment) => {
   const {text, author, emotion, commentDate} = comment;
