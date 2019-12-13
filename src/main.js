@@ -7,6 +7,6 @@ const COUNT_FILMS = 15;
 const movies = generateMovies(COUNT_FILMS);
 const filters = generateFilters(movies);
 
-const mainController = new PageController();
+const mainController = new PageController(movies, filters);
 
-mainController.render(movies, filters);
+mainController.render();

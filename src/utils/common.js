@@ -69,13 +69,13 @@ export const getFormatedDiffrenceDate = (date, currentDate) => {
 
 };
 
-export const sortMovies = (movies, key) => {
+export const sortMovies = (movies, key, desc = true) => {
   const sorted = movies.slice().sort((prevMovie, nextMovie) => {
     if (prevMovie[key] > nextMovie[key]) {
-      return -1;
+      return desc ? -1 : 1;
     }
     if (prevMovie[key] < nextMovie[key]) {
-      return 1;
+      return desc ? 1 : -1;
     }
     return 0;
   });
