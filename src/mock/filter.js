@@ -1,6 +1,6 @@
 const FILTERS = [
   {title: `All movies`, href: `all`, key: null},
-  {title: `Watchlist`, href: `watchlist`, key: `isInWatchlist`},
+  {title: `Watchlist`, href: `watchlist`, key: `inWatchlist`},
   {title: `History`, href: `history`, key: `isWatched`},
   {title: `Favorites`, href: `favorites`, key: `isFavorite`}
 ];
