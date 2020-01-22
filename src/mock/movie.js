@@ -1,4 +1,3 @@
-
 const DESCRIPTION = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 
 const RANDOM_LIMIT = 0.5;
@@ -131,11 +130,12 @@ const createComments = (count) => {
 
 const generateMovie = () => {
 
-  const isInWatchlist = getRandomBoolean();
+  const inWatchlist = getRandomBoolean();
   const isFavorite = getRandomBoolean();
+  const userRating = null;
   let isWatched = getRandomBoolean();
 
-  if (isInWatchlist) {
+  if (inWatchlist) {
     isWatched = false;
   }
 
@@ -145,6 +145,7 @@ const generateMovie = () => {
     title,
     originalTitle: title,
     rating: parseFloat(getRandomDecimal(MIN_RATING_COUNT, MAX_RATING_COUNT)),
+    userRating,
     director: getRandomItem(PEOPLE),
     writers: getRandomItems(PEOPLE, MIN_MOCK_COUNT, MAX_MOCK_COUNT),
     actors: getRandomItems(ACTORS, MIN_MOCK_COUNT, MAX_MOCK_COUNT),
@@ -157,7 +158,7 @@ const generateMovie = () => {
     comments: createComments(getRandomNumber(MIN_COMMENTS_COUNT, MAX_COMMENTS_COUNT)),
     isFavorite,
     isWatched,
-    isInWatchlist
+    inWatchlist
   };
 };
 

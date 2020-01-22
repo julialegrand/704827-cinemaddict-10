@@ -2,15 +2,25 @@
 import {getDuration, getDescription, getComments} from '../utils/common.js';
 import AbstractComponent from './abstract-component.js';
 
-const createFimlCardTemplate = (filmCard) => {
+const createButtonMarkup = (name, className, isActive) => {
+  const activeClass = isActive ? `film-card__controls-item--active` : ``;
+  return (
+    `<button class="film-card__controls-item button film-card__controls-item--${className} ${activeClass}">
+      ${name}
+    </button>`);
+};
 
-  const {title, rating, year, duration, genre, poster, description, comments, isFavorite, isWatched} = filmCard;
+const createFilmCardTemplate = (movie) => {
+
+  const {title, rating, year, duration, genre, poster, description, comments, inWatchlist, isFavorite, isWatched} = movie;
 
   const formatedDuration = getDuration(duration);
   const formatedDescription = getDescription(description);
   const formatedComments = getComments(comments);
 
-  const activeClass = isFavorite || isWatched ? `film-card__controls-item--active` : ``;
+  const watchlistButton = createButtonMarkup(`Add to watchlist`, `add-to-watchlist`, inWatchlist);
+  const watchedButton = createButtonMarkup(`Mark as watched`, `mark-as-watched`, isWatched);
+  const favoriteButton = createButtonMarkup(`Mark as favorite`, `favorite`, isFavorite);
 
   return `<article class="film-card">
     <h3 class="film-card__title">${title}</h3>
@@ -24,36 +34,70 @@ const createFimlCardTemplate = (filmCard) => {
   <p class="film-card__description">${formatedDescription}</p>
   <a class="film-card__comments">${formatedComments}</a>
     <form class="film-card__controls">
-      <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist">Add to watchlist</button>
-      <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${activeClass} film-card__controls-item--active">Mark as watched</button>
-      <button class="film-card__controls-item button film-card__controls-item--favorite ${activeClass}">Mark as favorite</button>
+      ${watchlistButton}
+      ${watchedButton}
+      ${favoriteButton}
     </form>
   </article>`;
 };
 
 
 export default class Card extends AbstractComponent {
-  constructor(filmCard) {
+  constructor(movie) {
     super();
-    this._filmCard = filmCard;
+    this._movie = movie;
+    this._clickHandler = null;
+    this._keyPressHandler = null;
+    this._addWatchlistClickHandler = null;
+    this._markWatchedClickHandler = null;
+    this._markFavoriteClickHandler = null;
+  }
+
+  rerender() {
+    super.rerender();
+  }
+
+  recoveryListeners() {
+    this.setClickHandler(this._clickHandler);
+    this.setKeyPressHandler(this._keyPressHandler);
+    this.setAddWatchlistClickHandler(this._addWatchlistClickHandler);
+    this.setMarkWatchedClickHandler(this._markWatchedClickHandler);
+    this.setMarkFavoriteClickHandler(this._markFavoriteClickHandler);
   }
 
   getTemplate() {
-    return createFimlCardTemplate(this._filmCard);
+    return createFilmCardTemplate(this._movie);
   }
 
-  setEditPosterClickHandler(handler) {
-    this.getElement().querySelector(`.film-card .film-card__poster`)
-      .addEventListener(`click`, handler);
+  setClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, handler);
+    this.getElement().querySelector(`.film-card__title`).addEventListener(`click`, handler);
+    this.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, handler);
+    this._clickHandler = handler;
   }
 
-  setEditTitleClickHandler(handler) {
-    this.getElement().querySelector(`.film-card .film-card__title`)
-      .addEventListener(`click`, handler);
+  setKeyPressHandler(handler) {
+    this.getElement().querySelector(`.film-card__poster`).addEventListener(`keydown`, handler);
+    this.getElement().querySelector(`.film-card__title`).addEventListener(`keydown`, handler);
+    this.getElement().querySelector(`.film-card__comments`).addEventListener(`keydown`, handler);
+    this._keyPressHandler = handler;
   }
 
-  setEditCommentClickHandler(handler) {
-    this.getElement().querySelector(`.film-card .film-card__comments`)
+  setAddWatchlistClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`)
       .addEventListener(`click`, handler);
+    this._addWatchlistClickHandler = handler;
+  }
+
+  setMarkWatchedClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`)
+      .addEventListener(`click`, handler);
+    this._markWatchedClickHandler = handler;
+  }
+
+  setMarkFavoriteClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__controls-item--favorite`)
+      .addEventListener(`click`, handler);
+    this._markFavoriteClickHandler = handler;
   }
 }
