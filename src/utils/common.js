@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const MINUTE_IN_HOUR = 60;
 const MIN_DESCRIPTION_LENGTH = 0;
 const MAX_DESCRIPTION_LENGTH = 140;
@@ -67,6 +69,14 @@ export const getFormatedDiffrenceDate = (date, currentDate) => {
   }
   return (differenceDays > 1) ? `${differenceDays} days ago` : `${differenceDays} day ago`;
 
+};
+
+export const formatDateMovie = (date) => {
+  return moment(date).format(`DD MMMM YYYY`);
+};
+
+export const formatDateComment = (date) => {
+  return moment(date).format(`YYYY/MM/DD HH:MM`);
 };
 
 export const sortMovies = (movies, key, desc = true) => {

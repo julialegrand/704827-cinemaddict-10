@@ -19,7 +19,7 @@ const createFilmControlMarkup = (name, id, isActive) => {
 };
 
 const createFilmDetailtemplate = (movie) => {
-  const {title, originalTitle, rating, userRating, director, writers, actors, year, duration, country, genre,
+  const {title, originalTitle, rating, userRating, director, writers, actors, releaseDate, duration, country, genre,
     poster, description, comments, inWatchlist, isFavorite, isWatched} = movie;
 
   const watchlistCheckbox = createFilmControlMarkup(`Add to watchlist`, `watchlist`, inWatchlist);
@@ -76,7 +76,7 @@ const createFilmDetailtemplate = (movie) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Release Date</td>
-                <td class="film-details__cell">${year}</td>
+                <td class="film-details__cell">${releaseDate}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>

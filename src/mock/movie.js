@@ -1,3 +1,5 @@
+import {formatDateMovie, formatDateComment} from '../utils/common';
+
 const DESCRIPTION = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 
 const RANDOM_LIMIT = 0.5;
@@ -6,8 +8,12 @@ const DESCRIPTION_MIN = 0;
 const DESCRIPTION_MAX = 3;
 const MIN_RATING_COUNT = 0;
 const MAX_RATING_COUNT = 10;
-const MIN_YEAR_MOVIE = 1970;
-const MAX_YEAR_MOVIE = 2020;
+const MIN_YEAR = 1900;
+const MAX_YEAR = 2020;
+const MIN_MONTH = 0;
+const MAX_MONTH = 12;
+const MIN_DAY = 1;
+const MAX_DAY = 31;
 const MIN_DURATION_COUNT = 40;
 const MAX_DURATION_COUNT = 180;
 const MIN_COMMENTS_COUNT = 0;
@@ -96,10 +102,8 @@ const getRandomBoolean = () => {
 
 const getRandomDate = () => {
   const currentDate = new Date();
-  const year = getRandomNumber(MIN_YEAR_MOVIE, MAX_YEAR_MOVIE);
-  currentDate.setFullYear(year);
-
-  return currentDate;
+  const randomDate = new Date(getRandomNumber(MIN_YEAR, MAX_YEAR), getRandomNumber(MIN_MONTH, MAX_MONTH), getRandomNumber(MIN_DAY, MAX_DAY));
+  return new Date(randomDate.getTime() + Math.random() * (currentDate.getTime() - randomDate.getTime()));
 };
 
 const getRandomItem = (items) => {
@@ -118,7 +122,7 @@ const createComment = () => {
     text: getRandomItems(DESCRIPTION.split(`.`), MIN_COMMENTS_COUNT, MAX_COMMENTS_COUNT).join(` `),
     emotion: getRandomItem(EMOTIONS),
     author: getRandomItem(PEOPLE),
-    commentDate: getRandomDate(),
+    commentDate: formatDateComment(getRandomDate()),
   };
 };
 
@@ -149,7 +153,7 @@ const generateMovie = () => {
     director: getRandomItem(PEOPLE),
     writers: getRandomItems(PEOPLE, MIN_MOCK_COUNT, MAX_MOCK_COUNT),
     actors: getRandomItems(ACTORS, MIN_MOCK_COUNT, MAX_MOCK_COUNT),
-    year: MIN_YEAR_MOVIE + getRandomNumber(MIN_YEAR_MOVIE, MAX_YEAR_MOVIE),
+    releaseDate: formatDateMovie(getRandomDate()),
     duration: getRandomNumber(MIN_DURATION_COUNT, MAX_DURATION_COUNT),
     country: getRandomItem(COUNTRIES),
     genre: getRandomItems(GENRES, MIN_MOCK_COUNT, MAX_MOCK_COUNT),
