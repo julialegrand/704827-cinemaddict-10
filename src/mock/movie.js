@@ -146,6 +146,7 @@ const generateMovie = () => {
   const title = getRandomItem(MOVIE_NAMES);
 
   return {
+    id: String(new Date() + Math.random()),
     title,
     originalTitle: title,
     rating: parseFloat(getRandomDecimal(MIN_RATING_COUNT, MAX_RATING_COUNT)),

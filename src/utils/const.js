@@ -6,3 +6,10 @@ export const MovieControllerMode = {
   DEFAULT: `default`,
   EDIT: `edit`,
 };
+
+export const FilterType = {
+  ALL: `All movies`,
+  WATCHLIST: `Watchlist`,
+  HISTORY: `History`,
+  FAVORITES: `Favorites`
+};
