@@ -31,6 +31,10 @@ export default class Movies {
     return this._movies;
   }
 
+  getWatchedMovies() {
+    return getMoviesByFilter(this._movies, FilterType.HISTORY);
+  }
+
   setMovies(movies) {
     this._movies = Array.from(movies);
   }

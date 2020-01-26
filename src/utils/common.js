@@ -1,26 +1,30 @@
 import moment from 'moment';
+import {NOVICE_MIN, FAN_MIN, MOVIE_BUFF_MIN, ProfileRatings} from './const.js';
 
-const MINUTE_IN_HOUR = 60;
 const MIN_DESCRIPTION_LENGTH = 0;
 const MAX_DESCRIPTION_LENGTH = 140;
 const DESCRIPTION_SPACE = 1;
 const MANY_COMMENTS_COUNT = 1;
 const ONE_DAY = 86400000;
 
-export const getDuration = (duration) => {
-  let formatedDuration = ``;
+export const getMovieDuration = (time) => {
+  const timeInHours = moment.duration(time, `minutes`).hours();
+  const timeInMinutes = moment.duration(time, `minutes`).minutes();
+  return timeInHours !== 0 ? `${timeInHours}h ${timeInMinutes}m` : `${timeInMinutes}m`;
+};
 
-  if (duration < MINUTE_IN_HOUR) {
-    formatedDuration += `${duration}m`;
-  } else if (duration === MINUTE_IN_HOUR) {
-    formatedDuration += `${duration}h`;
-  } else {
-    const hours = (duration / MINUTE_IN_HOUR).toFixed(0);
-    const minutes = duration % MINUTE_IN_HOUR;
-    formatedDuration += `${hours}h ${minutes}m`;
+export const getProfileRating = (watchedMovies) => {
+  let profileRating = ``;
+  if (watchedMovies >= NOVICE_MIN) {
+    profileRating = ProfileRatings.NOVICE;
   }
-
-  return formatedDuration;
+  if (watchedMovies >= FAN_MIN) {
+    profileRating = ProfileRatings.FAN;
+  }
+  if (watchedMovies >= MOVIE_BUFF_MIN) {
+    profileRating = ProfileRatings.MOVIE_BUFF;
+  }
+  return profileRating;
 };
 
 export const getDescription = (description) => {
@@ -37,26 +41,6 @@ export const getComments = (comments) => {
   return commentsCount > MANY_COMMENTS_COUNT ? `${commentsCount} comments` : `${commentsCount} comment`;
 };
 
-export const getFormatedValue = (value) => {
-  return value < 10 ? `0${value}` : value.toString();
-};
-
-export const getDateValues = (date) => {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const day = date.getDate();
-  const hours = getFormatedValue(date.getHours());
-  const minutes = getFormatedValue(date.getMinutes());
-
-  return {year, month, day, hours, minutes};
-};
-
-export const getFormatedCommentDate = (date) => {
-  const {year, month, day, hours, minutes} = getDateValues(date);
-
-  return `${year}/${month}/${day} ${hours}:${minutes}`;
-};
-
 export const getFormatedDiffrenceDate = (date, currentDate) => {
   const differenceTimestamp = currentDate.valueOf() - date.valueOf();
   if (differenceTimestamp < ONE_DAY) {
@@ -65,10 +49,9 @@ export const getFormatedDiffrenceDate = (date, currentDate) => {
 
   const differenceDays = differenceTimestamp % ONE_DAY;
   if (differenceDays > 3) {
-    return getFormatedCommentDate(date);
+    return formatDateComment(date);
   }
   return (differenceDays > 1) ? `${differenceDays} days ago` : `${differenceDays} day ago`;
-
 };
 
 export const formatDateMovie = (date) => {
@@ -91,5 +74,3 @@ export const sortMovies = (movies, key, desc = true) => {
   });
   return sorted;
 };
-
-

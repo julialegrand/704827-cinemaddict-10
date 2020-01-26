@@ -1,5 +1,5 @@
-
-import {getDuration, getDescription, getComments} from '../utils/common.js';
+import moment from 'moment';
+import {getMovieDuration, getDescription, getComments} from '../utils/common.js';
 import AbstractComponent from './abstract-component.js';
 
 const createButtonMarkup = (name, className, isActive) => {
@@ -12,11 +12,12 @@ const createButtonMarkup = (name, className, isActive) => {
 
 const createFilmCardTemplate = (movie) => {
 
-  const {title, rating, year, duration, genre, poster, description, comments, inWatchlist, isFavorite, isWatched} = movie;
+  const {title, rating, releaseDate, runtime, genre, poster, description, comments, inWatchlist, isFavorite, isWatched} = movie;
 
-  const formatedDuration = getDuration(duration);
+  const formatedDuration = getMovieDuration(runtime);
   const formatedDescription = getDescription(description);
   const formatedComments = getComments(comments);
+  const releaseDateYear = moment(releaseDate).format(`YYYY`);
 
   const watchlistButton = createButtonMarkup(`Add to watchlist`, `add-to-watchlist`, inWatchlist);
   const watchedButton = createButtonMarkup(`Mark as watched`, `mark-as-watched`, isWatched);
@@ -26,11 +27,11 @@ const createFilmCardTemplate = (movie) => {
     <h3 class="film-card__title">${title}</h3>
     <p class="film-card__rating">${rating}</p>
     <p class="film-card__info">
-    <span class="film-card__year">${year}</span>
+    <span class="film-card__year">${releaseDateYear}</span>
     <span class="film-card__duration">${formatedDuration}</span>
-    <span class="film-card__genre">${genre}</span>
+    <span class="film-card__genre">${genre[0] || ``}</span>
     </p>
-    <img src="./images/posters/${poster}" alt="" class="film-card__poster">
+    <img src="${poster}" alt="" class="film-card__poster">
   <p class="film-card__description">${formatedDescription}</p>
   <a class="film-card__comments">${formatedComments}</a>
     <form class="film-card__controls">

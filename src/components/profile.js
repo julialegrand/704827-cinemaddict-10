@@ -1,25 +1,8 @@
 import AbstractComponent from './abstract-component.js';
-
-const ProfileRatings = {
-  NOVICE: `Novice`,
-  FAN: `Fan`,
-  MOVIE_BUFF: `Movie Buff`
-};
-const NOVICE_MIN = 1;
-const FAN_MIN = 11;
-const MOVIE_BUFF_MIN = 21;
+import {getProfileRating} from '../utils/common.js';
 
 const createProfileTemplate = (watchedMovies) => {
-  let profileRating = ``;
-  if (watchedMovies >= NOVICE_MIN) {
-    profileRating = ProfileRatings.NOVICE;
-  }
-  if (watchedMovies >= FAN_MIN) {
-    profileRating = ProfileRatings.FAN;
-  }
-  if (watchedMovies >= MOVIE_BUFF_MIN) {
-    profileRating = ProfileRatings.MOVIE_BUFF;
-  }
+  const profileRating = getProfileRating(watchedMovies);
 
   return `<section class="header__profile profile">
     <p class="profile__rating">${profileRating}</p>
