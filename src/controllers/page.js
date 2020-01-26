@@ -44,6 +44,16 @@ export default class PageController {
     this._moviesModel.setFilterChangeHandler(this._filterChangeHandler);
   }
 
+  hide() {
+    this._contentComponent.hide();
+    this._sortComponent.hide();
+  }
+
+  show() {
+    this._contentComponent.show();
+    this._sortComponent.show();
+  }
+
   render() {
     const movies = this._moviesModel.getMovies();
     const watchedMovies = movies.filter((movie) => movie.isWatched).length;

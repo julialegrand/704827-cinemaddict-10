@@ -1,5 +1,5 @@
 import SiteMenuComponent from '../components/menu.js';
-import {FilterType} from '../utils/const.js';
+import {FilterType, STATS} from '../utils/const.js';
 import {getMoviesByFilter} from '../models/movies';
 import {render, replace, RenderPosition} from '../utils/render.js';
 
@@ -16,6 +16,8 @@ export default class FilterController {
     this._dataChangeHandler = this._dataChangeHandler.bind(this);
 
     this._moviesModel.setDataChangeHandler(this._dataChangeHandler);
+
+    this._menuChangeHandler = null;
   }
 
   render() {
@@ -41,7 +43,16 @@ export default class FilterController {
     }
   }
 
+  setMenuChangeHandler(handler) {
+    this._menuChangeHandler = handler;
+  }
+
   _filterChangeHandler(filterType) {
+    if (filterType === STATS) {
+      this._menuChangeHandler(true);
+      return;
+    }
+    this._menuChangeHandler(false);
     this._moviesModel.setFilter(filterType);
     this._activeFilterType = filterType;
   }

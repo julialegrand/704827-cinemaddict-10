@@ -1,4 +1,6 @@
 import {createCommentsTemplate} from './comment.js';
+import {getMovieDuration, formatDateMovie} from '../utils/common.js';
+
 import AbstractSmartComponent from './abstract-smart-component.js';
 import Rating from './rating.js';
 
@@ -19,7 +21,7 @@ const createFilmControlMarkup = (name, id, isActive) => {
 };
 
 const createFilmDetailtemplate = (movie) => {
-  const {title, originalTitle, rating, userRating, director, writers, actors, releaseDate, duration, country, genre,
+  const {title, originalTitle, rating, userRating, director, writers, actors, releaseDate, runtime, country, genre,
     poster, description, comments, inWatchlist, isFavorite, isWatched} = movie;
 
   const watchlistCheckbox = createFilmControlMarkup(`Add to watchlist`, `watchlist`, inWatchlist);
@@ -33,6 +35,7 @@ const createFilmDetailtemplate = (movie) => {
 
   const commentsTemplate = createCommentsTemplate(comments);
   const commentsCount = comments.length;
+  const formatedDuration = getMovieDuration(runtime);
 
   return (
     `<section class="film-details">
@@ -43,7 +46,7 @@ const createFilmDetailtemplate = (movie) => {
         </div>
         <div class="film-details__info-wrap">
           <div class="film-details__poster">
-            <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
+            <img class="film-details__poster-img" src="${poster}" alt="">
 
             <p class="film-details__age">18+</p>
           </div>
@@ -76,11 +79,11 @@ const createFilmDetailtemplate = (movie) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Release Date</td>
-                <td class="film-details__cell">${releaseDate}</td>
+                <td class="film-details__cell">${formatDateMovie(releaseDate)}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>
-                <td class="film-details__cell">${duration}</td>
+                <td class="film-details__cell">${formatedDuration}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Country</td>

@@ -23,7 +23,7 @@ const createRatingTemplate = (movie) => {
 
         <div class="film-details__user-score">
           <div class="film-details__user-rating-poster">
-            <img src="./images/posters/${poster}" alt="film-poster" class="film-details__user-rating-img">
+            <img src="${poster}" alt="film-poster" class="film-details__user-rating-img">
           </div>
 
           <section class="film-details__user-rating-inner">

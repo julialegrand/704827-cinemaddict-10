@@ -1,5 +1,5 @@
 import AbstractComponent from './abstract-component.js';
-import {FilterType} from '../utils/const.js';
+import {FilterType, STATS} from '../utils/const.js';
 
 const createFiltersTemplate = (filters) => {
   return filters.map((filter) => {
@@ -16,7 +16,7 @@ const createMenuTemplate = (filters) => {
 
   return `<nav class="main-navigation">
             ${filtersTemplate}
-            <a href="#stats" data-filter-type="Stats" class="main-navigation__item main-navigation__item--additional">Stats</a>
+            <a href="#stats" data-filter-type="${STATS}" class="main-navigation__item main-navigation__item--additional">${STATS}</a>
           </nav>`;
 };
 
