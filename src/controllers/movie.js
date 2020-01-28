@@ -1,16 +1,19 @@
+import moment from 'moment';
 import CardComponent from '../components/card.js';
 import PopupComponent from '../components/popup.js';
 import {MovieControllerMode} from '../utils/const.js';
+import MovieModel from '../models/movie.js';
 import {RenderPosition, render, replace, remove} from '../utils/render.js';
 
 export default class MovieController {
-  constructor(container, dataChangeHandler, viewChangeHandler) {
+  constructor(container, dataChangeHandler, viewChangeHandler, commentDataChangeHandler) {
     this._container = container;
     this._cardComponent = null;
     this._cardPopupComponent = null;
     this._movie = null;
     this._dataChangeHandler = dataChangeHandler;
     this._viewChangeHandler = viewChangeHandler;
+    this._commentDataChangeHandler = commentDataChangeHandler;
 
     this._mode = MovieControllerMode.DEFAULT;
 
@@ -22,6 +25,8 @@ export default class MovieController {
     this._addWatchlistClickHandler = this._addWatchlistClickHandler.bind(this);
     this._markWatchedClickHandler = this._markWatchedClickHandler.bind(this);
     this._markFavoriteClickHandler = this._markFavoriteClickHandler.bind(this);
+    this._commentDeleteClickHandler = this._commentDeleteClickHandler.bind(this);
+    this._addCommentHandler = this._addCommentHandler.bind(this);
   }
 
   render(movie) {
@@ -47,6 +52,9 @@ export default class MovieController {
     cardPopupComponent.setAddWatchlistClickHandler(this._addWatchlistClickHandler);
     cardPopupComponent.setMarkWatchedClickHandler(this._markWatchedClickHandler);
     cardPopupComponent.setMarkFavoriteClickHandler(this._markFavoriteClickHandler);
+    cardPopupComponent.setEmotionClickHandler();
+    cardPopupComponent.setCommentDeleteClickHandler(this._commentDeleteClickHandler);
+    cardPopupComponent.setAddCommmentHandler(this._addCommentHandler);
     return cardPopupComponent;
   }
 
@@ -61,37 +69,31 @@ export default class MovieController {
   }
 
   _addWatchlistClickHandler() {
-    const inWatchlist = !this._movie.inWatchlist;
-    let isWatched = this._movie.isWatched;
-    if (inWatchlist) {
-      isWatched = false;
-    }
-    this._dataChangeHandler(this, this._movie, Object.assign({}, this._movie, {
-      inWatchlist,
-      isWatched,
-    }));
+    const updatedMovie = MovieModel.clone(this._movie);
+    updatedMovie.inWatchlist = !updatedMovie.inWatchlist;
+    this._dataChangeHandler(this, this._movie, updatedMovie);
   }
 
   _markWatchedClickHandler() {
-    const isWatched = !this._movie.isWatched;
-    let inWatchlist = this._movie.inWatchlist;
-    let userRating = this._movie.userRating;
-    if (isWatched) {
-      inWatchlist = false;
-    } else {
-      userRating = null;
-    }
-    this._dataChangeHandler(this, this._movie, Object.assign({}, this._movie, {
-      inWatchlist,
-      isWatched,
-      userRating
-    }));
+    const updatedMovie = MovieModel.clone(this._movie);
+    updatedMovie.isWatched = !updatedMovie.isWatched;
+    updatedMovie.userRating = 0;
+    updatedMovie.watchingDate = moment().format();
+    this._dataChangeHandler(this, this._movie, updatedMovie);
   }
 
   _markFavoriteClickHandler() {
-    this._dataChangeHandler(this, this._movie, Object.assign({}, this._movie, {
-      isFavorite: !this._movie.isFavorite,
-    }));
+    const updatedMovie = MovieModel.clone(this._movie);
+    updatedMovie.isFavorite = !updatedMovie.isFavorite;
+    this._dataChangeHandler(this, this._movie, updatedMovie);
+  }
+
+  _commentDeleteClickHandler(commentId) {
+    this._commentDataChangeHandler(this, this._movie, commentId, null);
+  }
+
+  _addCommentHandler(newComment) {
+    this._commentDataChangeHandler(this, this._movie, null, newComment);
   }
 
   _showPopup() {

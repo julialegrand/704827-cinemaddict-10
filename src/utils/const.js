@@ -33,3 +33,10 @@ export const StatisticsFilter = {
   MONTH: `month`,
   YEAR: `year`
 };
+
+export const EmotionType = {
+  SMILE: `smile`,
+  SLEEPING: `sleeping`,
+  PUKE: `puke`,
+  ANGRY: `angry`
+};

@@ -15,7 +15,7 @@ const mainElement = document.querySelector(`.main`);
 
 const statisticsComponent = new StatisticsComponent(moviesModel);
 const filterController = new FilterController(mainElement, moviesModel);
-const pageController = new PageController(mainElement, moviesModel);
+const pageController = new PageController(mainElement, moviesModel, api);
 
 const menuChangeHandler = (isStatsActive) => {
   if (isStatsActive) {
