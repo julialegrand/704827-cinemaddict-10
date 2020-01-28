@@ -1,7 +1,7 @@
 import {getFormatedDiffrenceDate} from '../utils/common.js';
 
 const createCommentTemplate = (comment) => {
-  const {comment: commentText, author, emotion, date} = comment;
+  const {id, comment: commentText, author, emotion, date} = comment;
   const formattedDate = getFormatedDiffrenceDate(date, new Date());
 
   return `
@@ -14,7 +14,7 @@ const createCommentTemplate = (comment) => {
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
           <span class="film-details__comment-day">${formattedDate}</span>
-          <button class="film-details__comment-delete">Delete</button>
+          <button class="film-details__comment-delete" value="${id}">Delete</button>
         </p>
       </div>
     </li>

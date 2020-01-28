@@ -13,17 +13,18 @@ const SHOWING_MOVIES_COUNT_BY_BUTTON = 5;
 const COUNT_FILMS = 15;
 const SHOWING_MOVIE_COUNT_EXTRA_FILM = 2;
 
-const renderMovies = (movies, container, dataChangeHandler, viewChangeHandler) => {
+const renderMovies = (movies, container, dataChangeHandler, viewChangeHandler, commentDataChangeHandler) => {
   return movies.map((movie) => {
-    const movieController = new MovieController(container, dataChangeHandler, viewChangeHandler);
+    const movieController = new MovieController(container, dataChangeHandler, viewChangeHandler, commentDataChangeHandler);
     movieController.render(movie);
     return movieController;
   });
 };
 
 export default class PageController {
-  constructor(container, moviesModel) {
+  constructor(container, moviesModel, api) {
     this._container = container;
+    this._api = api;
     this._moviesModel = moviesModel;
     this._sortType = SortType.DEFAULT;
     this._showedMovieControllers = [];
@@ -37,6 +38,7 @@ export default class PageController {
 
     this._dataChangeHandler = this._dataChangeHandler.bind(this);
     this._viewChangeHandler = this._viewChangeHandler.bind(this);
+    this._commentDataChangeHandler = this._commentDataChangeHandler.bind(this);
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
     this._filterChangeHandler = this._filterChangeHandler.bind(this);
     this._loadMoreButtonClickHandler = this._loadMoreButtonClickHandler.bind(this);
@@ -86,15 +88,15 @@ export default class PageController {
     const topCommentedFilms = movies.filter((movie) => movie.comments.length > 0);
     const sortedTopCommentedFilms = sortMovies(topCommentedFilms, `comments`).slice(0, SHOWING_MOVIE_COUNT_EXTRA_FILM);
 
-    renderMovies(sortedTopRatedFilms, filmsTopRatedContainer, this._dataChangeHandler, this._viewChangeHandler);
-    renderMovies(sortedTopCommentedFilms, filmsMostCommentedContainer, this._dataChangeHandler, this._viewChangeHandler);
+    renderMovies(sortedTopRatedFilms, filmsTopRatedContainer, this._dataChangeHandler, this._viewChangeHandler, this._commentDataChangeHandler);
+    renderMovies(sortedTopCommentedFilms, filmsMostCommentedContainer, this._dataChangeHandler, this._viewChangeHandler, this._commentDataChangeHandler);
 
     this._renderLoadMoreButton();
     this._sortComponent.setSortTypeChangeHandler(this._sortTypeChangeHandler);
   }
 
   _renderMovies(movies) {
-    const newMovies = renderMovies(movies, this._mainFilmList, this._dataChangeHandler, this._viewChangeHandler);
+    const newMovies = renderMovies(movies, this._mainFilmList, this._dataChangeHandler, this._viewChangeHandler, this._commentDataChangeHandler);
     this._showedMovieControllers = this._showedMovieControllers.concat(newMovies);
     this._showingMoviesCount = this._showedMovieControllers.length;
   }
@@ -156,6 +158,28 @@ export default class PageController {
     const isSuccess = this._moviesModel.updateMovie(oldMovie.id, newMovie);
     if (isSuccess) {
       movieController.render(newMovie);
+    }
+  }
+
+  _commentDataChangeHandler(movieController, oldMovie, commentId, newComment) {
+    if (!newComment) {
+      this._api.deleteComment(commentId)
+      .then(() => {
+        const isSuccess = this._moviesModel.removeComment(oldMovie.id, commentId);
+        if (isSuccess) {
+          const updatedMovie = this._moviesModel.getMovieById(oldMovie.id);
+          movieController.render(updatedMovie);
+        }
+      });
+    } else {
+      this._api.createComment(oldMovie.id, newComment)
+      .then((updatedComments) => {
+        const isSuccess = this._moviesModel.updateComments(oldMovie.id, updatedComments);
+        if (isSuccess) {
+          const updatedMovie = this._moviesModel.getMovieById(oldMovie.id);
+          movieController.render(updatedMovie);
+        }
+      });
     }
   }
 

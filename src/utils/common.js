@@ -1,11 +1,14 @@
 import moment from 'moment';
+import numberToWords from 'number-to-words';
 import {NOVICE_MIN, FAN_MIN, MOVIE_BUFF_MIN, ProfileRatings} from './const.js';
 
 const MIN_DESCRIPTION_LENGTH = 0;
 const MAX_DESCRIPTION_LENGTH = 140;
 const DESCRIPTION_SPACE = 1;
 const MANY_COMMENTS_COUNT = 1;
-const ONE_DAY = 86400000;
+
+const MINUTE_IN_HOUR = 60;
+const SECONDS_IN_MINUTE = 60;
 
 export const getMovieDuration = (time) => {
   const timeInHours = moment.duration(time, `minutes`).hours();
@@ -42,16 +45,58 @@ export const getComments = (comments) => {
 };
 
 export const getFormatedDiffrenceDate = (date, currentDate) => {
-  const differenceTimestamp = currentDate.valueOf() - date.valueOf();
-  if (differenceTimestamp < ONE_DAY) {
-    return `Today`;
-  }
+  const differenceTimestamp = currentDate - new Date(date);
 
-  const differenceDays = differenceTimestamp % ONE_DAY;
-  if (differenceDays > 3) {
-    return formatDateComment(date);
+  const daysCount = getDays(differenceTimestamp);
+  const hoursCount = getHours(differenceTimestamp);
+  const minutesCount = getMinutes(differenceTimestamp);
+  const secondCount = getSeconds(differenceTimestamp);
+
+  let formatedDate = ``;
+
+  if (daysCount > 1) {
+    const daysCountText = numberToWords.toWords(daysCount);
+    formatedDate = `a ${daysCountText.toLowerCase()} days ago`;
+  } else if (daysCount === 1) {
+    formatedDate = `a day ago`;
+  } else if (hoursCount >= 2 && hoursCount <= 23 && minutesCount >= 0 && minutesCount <= 59) {
+    formatedDate = `a few hours ago`;
+  } else if (hoursCount === 1 && minutesCount >= 0 && minutesCount <= 59) {
+    formatedDate = `a hour ago`;
+  } else if (minutesCount >= 4 && minutesCount <= 59) {
+    formatedDate = ` a few minutes ago`;
+  } else if (minutesCount >= 1 && minutesCount <= 3) {
+    formatedDate = `a minute ago`;
+  } else if (secondCount >= 0 && secondCount <= 59) {
+    formatedDate = `now`;
   }
-  return (differenceDays > 1) ? `${differenceDays} days ago` : `${differenceDays} day ago`;
+  return formatedDate;
+};
+
+const getDays = (timestamp) => {
+  return moment.duration(timestamp, `milliseconds`).days();
+};
+
+const getHours = (timestamp) => {
+  return moment.duration(timestamp, `milliseconds`).hours();
+};
+
+const getMinutes = (timestamp) => {
+  const minutes = moment.duration(timestamp, `milliseconds`).minutes();
+  if (minutes > MINUTE_IN_HOUR) {
+    const hours = getHours(timestamp);
+    return minutes - (hours * MINUTE_IN_HOUR);
+  }
+  return minutes;
+};
+
+const getSeconds = (timestamp) => {
+  const seconds = moment.duration(timestamp, `milliseconds`).seconds();
+  if (seconds > SECONDS_IN_MINUTE) {
+    const minutes = getMinutes(timestamp);
+    return seconds - (minutes * SECONDS_IN_MINUTE);
+  }
+  return seconds;
 };
 
 export const formatDateMovie = (date) => {
