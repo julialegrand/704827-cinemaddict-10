@@ -5,6 +5,9 @@ import {MovieControllerMode} from '../utils/const.js';
 import MovieModel from '../models/movie.js';
 import {RenderPosition, render, replace, remove} from '../utils/render.js';
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
+const USER_ZERO_RATING = 0;
+
 export default class MovieController {
   constructor(container, dataChangeHandler, viewChangeHandler, commentDataChangeHandler) {
     this._container = container;
@@ -27,6 +30,8 @@ export default class MovieController {
     this._markFavoriteClickHandler = this._markFavoriteClickHandler.bind(this);
     this._commentDeleteClickHandler = this._commentDeleteClickHandler.bind(this);
     this._addCommentHandler = this._addCommentHandler.bind(this);
+    this._ratingInputChangeHandler = this._ratingInputChangeHandler.bind(this);
+    this._undoRatingHandler = this._undoRatingHandler.bind(this);
   }
 
   render(movie) {
@@ -40,10 +45,34 @@ export default class MovieController {
     if (oldCardComponent && oldCardPopupComponent) {
       replace(this._cardComponent, oldCardComponent);
       replace(this._cardPopupComponent, oldCardPopupComponent);
-      this._cardPopupComponent.renderRating();
     } else {
       render(this._container, this._cardComponent, RenderPosition.BEFOREEND);
     }
+  }
+
+  shake(isCreating, commentId) {
+    this._cardPopupComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    if (isCreating) {
+      this._cardPopupComponent.setBackgroundCommentInput();
+    }
+    setTimeout(() => {
+      this._cardPopupComponent.getElement().style.animation = ``;
+      if (isCreating) {
+        this._cardPopupComponent.setDefaultCommentInput();
+      } else {
+        this._cardPopupComponent.setDefaultDeleteButton(commentId);
+      }
+
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
+  shakeUserRating() {
+    this._cardPopupComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    this._cardPopupComponent.setBackgroundUserRatingInput();
+    setTimeout(() => {
+      this._cardPopupComponent.getElement().style.animation = ``;
+      this._cardPopupComponent.setDefaultUserRatingInput();
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   _getCardPopupComponent(movie) {
@@ -55,6 +84,8 @@ export default class MovieController {
     cardPopupComponent.setEmotionClickHandler();
     cardPopupComponent.setCommentDeleteClickHandler(this._commentDeleteClickHandler);
     cardPopupComponent.setAddCommmentHandler(this._addCommentHandler);
+    cardPopupComponent.setRatingInputChangeHandler(this._ratingInputChangeHandler);
+    cardPopupComponent.setUndoRatingHandler(this._undoRatingHandler);
     return cardPopupComponent;
   }
 
@@ -89,11 +120,27 @@ export default class MovieController {
   }
 
   _commentDeleteClickHandler(commentId) {
+    this._cardPopupComponent.setDisabledDeleteButton(commentId);
     this._commentDataChangeHandler(this, this._movie, commentId, null);
   }
 
   _addCommentHandler(newComment) {
+    this._cardPopupComponent.setDisabledCommentInput();
+    this._cardPopupComponent.removeBackgroundCommentInput();
     this._commentDataChangeHandler(this, this._movie, null, newComment);
+  }
+
+  _ratingInputChangeHandler(newRating) {
+    const updatedMovie = MovieModel.clone(this._movie);
+    updatedMovie.userRating = newRating;
+    this._cardPopupComponent.setDisabledUserRatingInputs();
+    this._dataChangeHandler(this, this._movie, updatedMovie);
+  }
+
+  _undoRatingHandler() {
+    const updatedMovie = MovieModel.clone(this._movie);
+    updatedMovie.userRating = USER_ZERO_RATING;
+    this._dataChangeHandler(this, this._movie, updatedMovie);
   }
 
   _showPopup() {
@@ -103,7 +150,6 @@ export default class MovieController {
       render(footerElement, this._cardPopupComponent, RenderPosition.AFTERBEGIN);
       this._viewChangeHandler();
       document.addEventListener(`keydown`, this._closePopupKeyPressHandler);
-      this._cardPopupComponent.renderRating();
       this._mode = MovieControllerMode.DETAIL;
     }
   }

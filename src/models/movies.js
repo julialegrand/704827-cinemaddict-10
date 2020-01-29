@@ -53,6 +53,8 @@ export default class Movies {
     if (index === -1) {
       return false;
     }
+    newMovie.comments = this._movies[index].comments.slice();
+
     this._movies = [...this._movies.slice(0, index), newMovie, ...this._movies.slice(index + 1)];
     this._dataChangeHandlers.forEach((handler) => handler());
     return true;

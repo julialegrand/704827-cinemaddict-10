@@ -27,7 +27,9 @@ export default class Movie {
   toRAW() {
     return {
       'id': this.id,
-      'comments': this.comments,
+      'comments': this.comments.map((comment) => {
+        return comment.id ? comment.id : comment;
+      }),
       'film_info': {
         'title': this.title,
         'alternative_title': this.originalTitle,

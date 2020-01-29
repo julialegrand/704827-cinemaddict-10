@@ -8,7 +8,7 @@ import MoviesModel from './models/movies.js';
 import {render, RenderPosition, remove} from './utils/render.js';
 
 const AUTHORIZATION = `Basic eo0w590ik29889a`;
-const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict/`;
+const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict`;
 
 const moviesModel = new MoviesModel();
 
