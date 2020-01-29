@@ -1,4 +1,6 @@
 import {getFormatedDiffrenceDate} from '../utils/common.js';
+import {DeleteStates} from '../utils/const.js';
+
 
 const createCommentTemplate = (comment) => {
   const {id, comment: commentText, author, emotion, date} = comment;
@@ -14,7 +16,7 @@ const createCommentTemplate = (comment) => {
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
           <span class="film-details__comment-day">${formattedDate}</span>
-          <button class="film-details__comment-delete" value="${id}">Delete</button>
+          <button class="film-details__comment-delete" value="${id}">${DeleteStates.DELETE}</button>
         </p>
       </div>
     </li>

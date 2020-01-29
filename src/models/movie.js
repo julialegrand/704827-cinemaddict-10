@@ -27,7 +27,9 @@ export default class Movie {
   toRAW() {
     return {
       'id': this.id,
-      'comments': this.comments,
+      'comments': this.comments.map((comment) => {
+        return comment.id ? comment.id : comment;
+      }),
       'film_info': {
         'title': this.title,
         'alternative_title': this.originalTitle,
@@ -49,7 +51,7 @@ export default class Movie {
         'personal_rating': this.userRating,
         'watchlist': this.inWatchlist,
         'already_watched': this.isWatched,
-        'watching_date': this.watchingDate,
+        'watching_date': this.watchingDate ? new Date(this.watchingDate).toISOString() : new Date(0).toISOString(),
         'favorite': this.isFavorite
       }
     };

@@ -2,11 +2,13 @@ import API from './api.js';
 import PageController from './controllers/page.js';
 import FilterController from './controllers/filter';
 import StatisticsComponent from './components/statistics.js';
+import ContentLoadingComponent from './components/content-loading.js';
+
 import MoviesModel from './models/movies.js';
-import {render, RenderPosition} from './utils/render.js';
+import {render, RenderPosition, remove} from './utils/render.js';
 
 const AUTHORIZATION = `Basic eo0w590ik29889a`;
-const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict/`;
+const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict`;
 
 const moviesModel = new MoviesModel();
 
@@ -16,6 +18,8 @@ const mainElement = document.querySelector(`.main`);
 const statisticsComponent = new StatisticsComponent(moviesModel);
 const filterController = new FilterController(mainElement, moviesModel);
 const pageController = new PageController(mainElement, moviesModel, api);
+const contentLoadingComponent = new ContentLoadingComponent();
+render(mainElement, contentLoadingComponent, RenderPosition.BEFOREEND);
 
 const menuChangeHandler = (isStatsActive) => {
   if (isStatsActive) {
@@ -36,6 +40,7 @@ api.getMovies()
     });
     Promise.all(commentsPromise).then(() => {
       moviesModel.setMovies(movies);
+      remove(contentLoadingComponent);
       filterController.setMenuChangeHandler(menuChangeHandler);
       filterController.render();
       pageController.render();

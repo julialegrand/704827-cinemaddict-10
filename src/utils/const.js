@@ -40,3 +40,8 @@ export const EmotionType = {
   PUKE: `puke`,
   ANGRY: `angry`
 };
+
+export const DeleteStates = {
+  DELETE: `Delete`,
+  DELETING: `Deleting...`
+};
