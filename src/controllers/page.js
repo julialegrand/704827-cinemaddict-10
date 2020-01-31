@@ -122,7 +122,7 @@ export default class PageController {
     this._showedMovieControllers = [];
   }
 
-  _sortTypeChangeHandler(sortType) {
+  _getMoviesBySortType(sortType) {
     let sortedMovies = [];
     const movies = this._moviesModel.getMovies();
 
@@ -134,18 +134,20 @@ export default class PageController {
         sortedMovies = sortMovies(movies.slice(), `rating`);
         break;
       case SortType.DEFAULT:
-        sortedMovies = movies.slice(0, this._showingMoviesCount);
+        sortedMovies = movies.slice(0);
         break;
     }
+    return sortedMovies;
+  }
+
+  _sortTypeChangeHandler(sortType) {
+    this._sortType = sortType;
+    const movies = this._getMoviesBySortType(this._sortType);
+    const sortedMovies = movies.slice(0, this._showingMoviesCount);
 
     this._removeMovies();
     this._renderMovies(sortedMovies);
-
-    if (sortType === SortType.DEFAULT) {
-      this._renderLoadMoreButton();
-    } else {
-      remove(this._buttonComponent);
-    }
+    this._renderLoadMoreButton();
   }
 
   _renderLoadMoreButton() {
@@ -160,7 +162,7 @@ export default class PageController {
 
   _loadMoreButtonClickHandler() {
     const prevMoviesCount = this._showingMoviesCount;
-    const movies = this._moviesModel.getMovies();
+    const movies = this._getMoviesBySortType(this._sortType);
 
     this._showingMoviesCount = this._showingMoviesCount + SHOWING_MOVIES_COUNT_BY_BUTTON;
     this._renderMovies(movies.slice(prevMoviesCount, this._showingMoviesCount));
