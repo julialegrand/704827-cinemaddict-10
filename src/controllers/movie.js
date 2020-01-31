@@ -50,6 +50,12 @@ export default class MovieController {
     }
   }
 
+  setDefaultView() {
+    if (this._mode !== MovieControllerMode.DEFAULT) {
+      this._closePopup();
+    }
+  }
+
   shake(isCreating, commentId) {
     this._cardPopupComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
     if (isCreating) {
@@ -174,12 +180,6 @@ export default class MovieController {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
-      this._closePopup();
-    }
-  }
-
-  setDefaultView() {
-    if (this._mode !== MovieControllerMode.DEFAULT) {
       this._closePopup();
     }
   }
